@@ -85,11 +85,54 @@ const authSlice = createSlice({
             state.user = null
             state.isAuthenticated = false
         },
+        forgotPasswordRequest(state){
+            state.loading = true
+            state.error = null
+            state.message = null
+        },
+        forgotPasswordSuccess(state, action){
+            state.loading = false
+            state.message = action.payload.message
+        },
+        forgotPasswordFailed(state, action){
+            state.loading = false
+            state.error = action.payload
+        },
+        resetPasswordRequest(state){
+            state.loading = true
+            state.error = null
+            state.message = null
+        },
+        resetPasswordSuccess(state, action){
+            state.loading = false
+            state.message = action.payload.message
+            state.user = action.payload.user
+            state.isAuthenticated = true
+        },
+        resetPasswordFailed(state, action){
+            state.loading = false
+            state.error = action.payload
+        },
+        updatePasswordRequest(state){
+            state.loading = true
+            state.error = null
+            state.message = null
+        },
+        updatePasswordSuccess(state, action){
+            state.loading = false
+            state.message = action.payload.message
+        },
+        updatePasswordFailed(state, action){
+            state.loading = false
+            state.error = action.payload
+        },
         resetAuthSlice(state){
             state.loading = false
             state.message = null
             state.error = null
+            // eslint-disable-next-line no-self-assign
             state.user = state.user
+            // eslint-disable-next-line no-self-assign
             state.isAuthenticated = state.isAuthenticated
         }
     }
@@ -148,7 +191,7 @@ export const login = (data) => async(dispatch) => {
 // @ts-ignore
 export const logout = () => async(dispatch) => {
     dispatch(authSlice.actions.logoutRequest())
-    await axios.post("http://localhost:4000/api/v1/auth/logout", {
+    await axios.get("http://localhost:4000/api/v1/auth/logout", {
         withCredentials: true,
     }).then(res => {
         dispatch(authSlice.actions.logoutSuccess(res.data.message))
@@ -169,3 +212,50 @@ export const getUser = () => async(dispatch) => {
         dispatch(authSlice.actions.getUserFailed(error.res.data.message()))
     })
 }
+
+// @ts-ignore
+export const forgotPassword = (email) => async(dispatch) => {
+    dispatch(authSlice.actions.forgotPasswordRequest())
+    await axios.post("http://localhost:4000/api/v1/auth/password/forgot", {email}, {
+        withCredentials: true,
+        headers: {
+            "Content-Type": "application/json",
+        }
+    }).then(res => {
+        dispatch(authSlice.actions.forgotPasswordSuccess(res.data))
+    }).catch(error => {
+        dispatch(authSlice.actions.forgotPasswordFailed(error.response.data.message()))
+    })
+}
+
+// @ts-ignore
+export const resetPassword = (data, token) => async(dispatch) => {
+    dispatch(authSlice.actions.resetPasswordRequest())
+    await axios.put(`http://localhost:4000/api/v1/auth/password/reset/${token}`, data, {
+        withCredentials: true,
+        headers: {
+            "Content-Type": "application/json",
+        }
+    }).then(res => {
+        dispatch(authSlice.actions.resetPasswordSuccess(res.data))
+    }).catch(error => {
+        dispatch(authSlice.actions.resetPasswordFailed(error.response.data.message()))
+    })
+}
+
+// @ts-ignore
+export const updatePassword = (data) => async(dispatch) => {
+    dispatch(authSlice.actions.updatePasswordRequest())
+    await axios.put(`http://localhost:4000/api/v1/auth/password/update`, data, {
+        withCredentials: true,
+        headers: {
+            "Content-Type": "application/json",
+        }
+    }).then(res => {
+        dispatch(authSlice.actions.updatePasswordSuccess(res.data.message))
+    }).catch(error => {
+        dispatch(authSlice.actions.updatePasswordFailed(error.response.data.message()))
+    })
+}
+
+export default authSlice.reducer
