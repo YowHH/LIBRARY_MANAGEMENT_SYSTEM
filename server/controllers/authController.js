@@ -23,7 +23,7 @@ export const register = catchAsyncErrors (async (req, res, next) => {
             email,
             accountVerified: false
         })
-        if(registerationAttemptsByUser.length >= 30){
+        if(registerationAttemptsByUser.length >= 50){
             return next(new ErrorHandler("You have exceeded the number of regristration attempts. Please contact support.", 400))
         }
         if(password.length < 8 || password.length > 16 ){
@@ -88,18 +88,20 @@ export const verifyOTP = catchAsyncErrors(async (req, res, next) => {
         }
 
         // @ts-ignore
-        user.accountVerfied = true
+        user.accountVerified = true
         // @ts-ignore
         user.verificationCode = null
-        // @ts-ignore
-        user.verificationCodeExpire = null
         // @ts-ignore
         await user.save({validateModifiedOnly: true})
         sendToken(user, 200, "Account Verified.", res)
 
 
     } catch (error) {
-        return next(new ErrorHandler("Internal server error.", 500))
+        console.error("========== 真实的 OTP 验证错误 ==========");
+        console.error(error); 
+        console.error("==========================================");
+
+        //return next(new ErrorHandler("Internal server error.", 500))
     }
 })
 
@@ -232,3 +234,24 @@ export const updatePassword = catchAsyncErrors(async (req, res, next) => {
         message: "Password updated."
     })
 })
+
+// @ts-ignore
+export const checkEmail = catchAsyncErrors(async (req, res, next) => {
+    const { email } = req.body;
+    if (!email) {
+        return next(new ErrorHandler("Email is required.", 400));
+    }
+
+    // 查找是否存在且已验证的用户
+    const user = await User.findOne({ email, accountVerified: true });
+
+    if (user) {
+        // 如果存在且已验证，返回 400 并带上特定提示
+        return next(new ErrorHandler("Account already exists. Please login.", 400));
+    }
+
+    res.status(200).json({
+        success: true,
+        message: "Email is available for registration."
+    });
+});

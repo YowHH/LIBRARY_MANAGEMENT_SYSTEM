@@ -16,12 +16,12 @@ const Home = () => {
 
   const { user, isAuthenticated } = useSelector(state => state.auth)
 
-  //if(!isAuthenticated){
-    //return<Navigate to={"/login"}/>
-  //}
+  if(!isAuthenticated){
+    return<Navigate to={"/login"}/>
+  }
 
   return <>
-    <div className="relative flex min-h-screen bg-gray-100 md:pl-64">
+    <div className="relative flex min-h-screen bg-gray-300 md:pl-64">
       <div className="absolute z-10 flex items-center justify-center text-white bg-black rounded-md md:hidden right-6 top-4 sm:top-6 h-9 w-9">
         <GiHamburgerMenu className="text-2xl" onClick={() => setIsSideBarOpen(!isSideBarOpen)}/>
       </div>
