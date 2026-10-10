@@ -62,9 +62,9 @@ const OTP = () => {
   };
 
   useEffect(() => {
-    if (message) {
-      toast.success(message);
-    }
+    //if (message) {
+    //  toast.success(message);
+    //}
     if (error) {
       toast.error(error);
       dispatch(resetAuthSlice());
@@ -80,7 +80,7 @@ const OTP = () => {
       <div className="flex flex-col justify-center h-screen md:flex-row">
         <div className="relative flex items-center justify-center w-full p-8 bg-white md:w-1/2">
           <Link
-            to={"/login"}
+            to={"/register"}
             className="fixed px-4 py-2 font-bold transition duration-300 border-2 border-black rounded-3xl w-52 top-10 -left-20 hover:bg-black hover:text-white text-end"
           >
             Back
@@ -122,13 +122,15 @@ const OTP = () => {
             </form>
           </div>
         </div>
-        <div>
-          <div>
-            <div>
-              <img src={logo_with_title} alt="logo" />
+        <div className="flex-col items-center justify-center hidden w-full p-8 text-white md:w-1/2 bg-black md:flex rounded-tl-[80px] rounded-bl-[80px]">
+          <div className="text-center h-[400px]">
+            <div className="flex justify-center mb-12">
+              <img src={logo_with_title} alt="logo" className="w-auto mb-12 h-44"/>
             </div>
-            <p>New to our platform? Sign up now</p>
-            <Link to={"/register"} className="w-full px-8 py-2 mt-5 font-semibold text-white transition bg-black border-2 border-white rounded-lg hover:bg-black hover:text-white">
+            <p className="mb-12 text-gray-300">
+              New to our platform? Sign up now
+            </p>
+            <Link to={"/register"} className="w-full px-8 py-2 mt-5 font-semibold text-white transition bg-black border-2 border-white rounded-lg hover:bg-white hover:text-black">
               SIGN UP
             </Link>
           </div>

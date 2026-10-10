@@ -12,24 +12,11 @@ const Register = () => {
   const [ name, setName] =useState('')
   const [ email, setEmail] =useState('')
   const [ password, setPassword] =useState('')
-  const [emailError, setEmailError] = useState('');
 
   const dispatch = useDispatch()
   const {loading, error, message, user, isAuthenticated} = useSelector(state => state.auth)
 
   const navigateTo = useNavigate()
-
-  const handleEmailBlur = async () => {
-    if (!email) return;
-    try {
-      await axios.post("http://localhost:27017/api/v1/auth/check-email", { email });
-      setEmailError('');
-    } catch (error) {
-      if (error.response && error.response.status === 400) {
-        setEmailError("Email already exists.");
-      }
-    }
-  }
 
   const handleRegister = (e) => {
     e.preventDefault()
@@ -42,6 +29,8 @@ const Register = () => {
 
     useEffect(() => {
       if(message){
+        toast.success(message)
+        dispatch(resetAuthSlice())
         navigateTo(`/otp-verification/${email}`)
       }
       if(error){
@@ -86,7 +75,7 @@ const Register = () => {
             />
           </div>
           <div className="mb-2">
-            <input type="email" value={email} onChange={((e) => setEmail(e.target.value))} placeholder="Email Address" onBlur={handleEmailBlur}
+            <input type="email" value={email} onChange={((e) => setEmail(e.target.value))} placeholder="Email Address"
             className="w-full px-4 py-3 border border-black rounded-md focus:outline bg-slate-100"
             />
           </div>
