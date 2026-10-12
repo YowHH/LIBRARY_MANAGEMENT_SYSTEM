@@ -10,7 +10,7 @@ import usersIcon from "../assets/people.png";
 import { RiAdminFill } from "react-icons/ri";
 import { useDispatch, useSelector } from "react-redux";
 import { logout, resetAuthSlice } from "../store/slices/authSlice.js";
-import { toggleAddNewAdminPopup } from "../store/slices/popUpSlice.js";
+import { toggleAddNewAdminPopup, toggleSettingPopup } from "../store/slices/popUpSlice.js";
 import { toast } from "react-toastify";
 import AddNewAdmin from "../popups/AddNewAdmin.jsx";
 
@@ -54,8 +54,8 @@ const SideBar = ({ isSideBarOpen, setIsSideBarOpen, setSelectedComponent }) => {
             <img src={bookIcon} alt="icon" />
             <span>Books</span>
           </button>
-          {/*{isAuthenticated && user?.role === "Admin" && (
-              <>*/}
+          {isAuthenticated && user?.role === "Admin" && (
+              <>
                 <button className="flex items-center w-full py-2 space-x-2 font-medium bg-transparent rounded-md hover:cursor-pointer"
                 onClick={() => setSelectedComponent("Catalog")}>
                   <img src={catalogIcon} alt="icon" />
@@ -70,8 +70,8 @@ const SideBar = ({ isSideBarOpen, setIsSideBarOpen, setSelectedComponent }) => {
                 onClick={() => dispatch(toggleAddNewAdminPopup())}>
                   <RiAdminFill className="w-6 h-6"/><span>Add New Admin</span>
                 </button>
-              {/*</>
-          )}*/}
+              </>
+          )}
           {
             isAuthenticated && user?.role === "User" && (
               <>
@@ -83,7 +83,7 @@ const SideBar = ({ isSideBarOpen, setIsSideBarOpen, setSelectedComponent }) => {
               </>
           )}
           <button className="flex items-center w-full py-2 space-x-2 font-medium bg-transparent rounded-md hover:cursor-pointer"
-          //onClick={() => setSelectedComponent("My Borrowed Book")}
+          onClick={() => dispatch(toggleSettingPopup())}
           >
               <img src={settingIcon} alt="icon" />
               <span>Update Credentials</span>

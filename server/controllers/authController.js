@@ -119,7 +119,7 @@ export const login = catchAsyncErrors(async (req, res, next) => {
     if(!isPasswordMatched){
         return next(new ErrorHandler("Invalid email or password.", 400))
     }
-    sendToken(user, 200, "User login successfully.")
+    sendToken(user, 200, "User login successfully.", res)
 })
 
 // @ts-ignore
