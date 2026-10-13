@@ -3,7 +3,6 @@ import axios from "axios";
 
 const authSlice = createSlice({
     name: "auth",
-
     initialState: {
         loading: false,
         error: null,
@@ -263,12 +262,18 @@ export const logout = () => async (dispatch) => {
 };
 
 export const getUser = () => async (dispatch) => {
+    const hasToken = document.cookie.split(';').some((item) => item.trim().startsWith('token='));
+
+    if (!hasToken) {
+        dispatch(authSlice.actions.getUserFailed("User is not authenticated"));
+        return;
+    }
+
     dispatch(authSlice.actions.getUserRequest());
 
     try {
-        const res = await axios.post(
+        const res = await axios.get(
             "http://localhost:4000/api/v1/auth/me",
-            {},
             {
                 withCredentials: true,
             }

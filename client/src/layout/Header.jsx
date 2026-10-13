@@ -25,7 +25,7 @@ const Header = () => {
     return () => clearInterval(intervalId)
   }, [])
   return <>
-  <header className="top-0 left-0 items-center justify-between w-full px-6 py-4 bg-white shadow-md asolute">
+  <header className="top-0 left-0 items-center justify-between w-full px-6 py-4 bg-white shadow-md absolute flex">
     <div className="flex items-center gap-2">
       <img src={userIcon} alt="userIcon" className="w-8 h-8"/>
       <div className="flex flex-col">

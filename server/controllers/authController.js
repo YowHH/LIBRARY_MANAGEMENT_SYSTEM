@@ -8,41 +8,50 @@ import { sendToken } from "../utils/sendToken.js"
 import { sendEmail } from "../utils/sendEmail.js"
 import { generateForgotPasswordEmailTemplate } from "../utils/emailTemplates.js"
 
+
 // @ts-ignore
-export const register = catchAsyncErrors (async (req, res, next) => {
+export const register = catchAsyncErrors(async (req, res, next) => {
     try {
-        const {name, email, password}=req.body
-        if (!name || !email || !password){
-            return next(new ErrorHandler("Please enter all fields.", 400))
+        const { name, email, password } = req.body;
+        if (!name || !email || !password) {
+            return next(new ErrorHandler("Please enter all fields.", 400));
         }
-        const isRegistered = await User.findOne({email, accountVerified: true})
-        if (isRegistered){
-            return next(new ErrorHandler("User already exists.", 400))
+
+        const isRegistered = await User.findOne({ email, accountVerified: true });
+        if (isRegistered) {
+            return next(new ErrorHandler("User already exists.", 400));
         }
-        const registerationAttemptsByUser = await User.find ({
+
+        const registerationAttemptsByUser = await User.find({
             email,
             accountVerified: false
-        })
-        if(registerationAttemptsByUser.length >= 50){
-            return next(new ErrorHandler("You have exceeded the number of regristration attempts. Please contact support.", 400))
+        });
+        if (registerationAttemptsByUser.length >= 50) {
+            return next(new ErrorHandler("You have exceeded the number of regristration attempts. Please contact support.", 400));
         }
-        if(password.length < 8 || password.length > 16 ){
-            return next(new ErrorHandler("Password must be between 8 and 16 characters.", 400))
+        if (password.length < 8 || password.length > 16) {
+            return next(new ErrorHandler("Password must be between 8 and 16 characters.", 400));
         }
-        const hashedPassword = await bcrypt.hash(password, 10)
+
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        const userCount = await User.countDocuments();
+        const role = userCount === 0 ? "Admin" : "User";
+
         const user = await User.create({
             name,
             email,
-            password: hashedPassword
-        })
-        // @ts-ignore
-        const verificationCode = await user.generateVerificationCode()
-        await user.save()
-        await sendVerificationCode(verificationCode, email, res)
+            password: hashedPassword,
+            role: role, 
+        });
+
+        const verificationCode = await user.generateVerificationCode();
+        await user.save();
+        await sendVerificationCode(verificationCode, email, res);
     } catch (error) {
-        next(error)
+        next(error);
     }
-})
+});
 
 // @ts-ignore
 export const verifyOTP = catchAsyncErrors(async (req, res, next) => {

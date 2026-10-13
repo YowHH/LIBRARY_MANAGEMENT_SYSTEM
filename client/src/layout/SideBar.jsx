@@ -13,15 +13,17 @@ import { logout, resetAuthSlice } from "../store/slices/authSlice.js";
 import { toggleAddNewAdminPopup, toggleSettingPopup } from "../store/slices/popUpSlice.js";
 import { toast } from "react-toastify";
 import AddNewAdmin from "../popups/AddNewAdmin.jsx";
+import { useNavigate } from "react-router-dom"; 
 
 // @ts-ignore
 const SideBar = ({ isSideBarOpen, setIsSideBarOpen, setSelectedComponent }) => {
-
+  const navigateTo = useNavigate();
   const dispatch = useDispatch()
   const { addNewAdminPopup } = useSelector(state => state.popup)
   const {loading, error, message, user, isAuthenticated} = useSelector(state => state.auth)
   const handleLogout = () => {
     dispatch(logout())
+    navigateTo("/login");
   }
   useEffect(() => {
     if(error){
@@ -62,7 +64,7 @@ const SideBar = ({ isSideBarOpen, setIsSideBarOpen, setSelectedComponent }) => {
                   <span>Catalog</span>
                 </button>
                 <button className="flex items-center w-full py-2 space-x-2 font-medium bg-transparent rounded-md hover:cursor-pointer"
-                onClick={() => setSelectedComponent("User")}>
+                onClick={() => setSelectedComponent("Users")}>
                   <img src={usersIcon} alt="icon" />
                   <span>Users</span>
                 </button>

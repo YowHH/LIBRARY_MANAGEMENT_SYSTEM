@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import { register, resetAuthSlice } from "../store/slices/authSlice.js";
 import { toast } from "react-toastify";
-import axios from "axios"; 
 
 const Register = () => {
 
@@ -37,7 +36,7 @@ const Register = () => {
         toast.error(error)
         dispatch(resetAuthSlice())
       }
-    }, [dispatch, isAuthenticated, error, loading])
+    }, [dispatch, isAuthenticated, error, loading, message, email, navigateTo])
 
     if(isAuthenticated){
       return <Navigate to={"/"}/>

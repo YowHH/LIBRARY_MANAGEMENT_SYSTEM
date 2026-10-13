@@ -14,7 +14,6 @@ const Login = () => {
   const {loading, error, message, user, isAuthenticated} = useSelector(state => state.auth)
 
   const navigateTo = useNavigate()
-  
 
   const handleLogin = (e) => {
     e.preventDefault()

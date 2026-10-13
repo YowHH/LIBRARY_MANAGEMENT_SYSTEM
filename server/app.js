@@ -12,7 +12,7 @@ import expressFileupload from "express-fileupload"
 import { notifyUsers } from "./service/notifyUser.js";
 import { removeUnverifiedAccounts } from "./service/removeUnverifiedAccounts.js";
 
-config({ path: "./config/cofig.env" });
+config({ path: "./config/config.env" });
 
 export const app = express();
 

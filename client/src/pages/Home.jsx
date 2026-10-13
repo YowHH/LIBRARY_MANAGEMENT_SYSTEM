@@ -14,7 +14,7 @@ const Home = () => {
   const [isSideBarOpen, setIsSideBarOpen] = useState(false)
   const [selectedComponent, setSelectedComponent] = useState("")
 
-  const { user, isAuthenticated } = useSelector(state => state.auth)
+  const { user, isAuthenticated } = useSelector(state => /** @type {any} */ (state).auth)
 
   if(!isAuthenticated){
     return<Navigate to={"/login"}/>
@@ -30,38 +30,35 @@ const Home = () => {
         (
           () => {
             switch (selectedComponent) {
-            case "DashBoard":
+              case "Dashboard":
                 return user?.role === "User" ? (
                   <UserDashboard/>
                 ) : (
                   <AdminDashboard/>
-                )
-              break;
+                );
               case "Books":
-                return <BookManagement/>
-                break;
+                return <BookManagement/>;
               case "Catalog":
-              if(user.role === "Admin"){
-                return <Catalog/>
-              }
-                break;
+                if (user.role === "Admin") {
+                  return <Catalog/>;
+                }
+                return null;
               case "Users":
-              if(user.role === "Admin"){
-                return <Users/>
-              } 
-                break;
+                if (user.role === "Admin") {
+                  return <Users/>;
+                }
+                return null;
               case "My Borrowed Books":
-              if(user.role === "Admin"){
-                return <MyBorrowedBooks/>
-              } 
-                break;
-            default:
-              return user?.role === "User" ? (
-                <UserDashboard/>
-              ) : (
-                <AdminDashboard/>
-              )
-              break;
+                if (user.role === "Admin") {
+                  return <MyBorrowedBooks/>;
+                }
+                return null;
+              default:
+                return user?.role === "User" ? (
+                  <UserDashboard/>
+                ) : (
+                  <AdminDashboard/>
+                );
             }
           }
         )()
