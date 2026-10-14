@@ -61,9 +61,9 @@ const authSlice = createSlice({
             state.message = null;
             state.error = null;
         },
-        logoutSuccess(state, action) {
+        logoutSuccess(state) {
             state.loading = false;
-            state.message = action.payload.message;
+            state.message = null;
             state.isAuthenticated = false;
             state.user = null;
             state.error = null;
@@ -241,7 +241,7 @@ export const logout = () => async (dispatch) => {
     dispatch(authSlice.actions.logoutRequest());
 
     try {
-        const res = await axios.get(
+        await axios.get(
             "http://localhost:4000/api/v1/auth/logout",
             {
                 withCredentials: true,
@@ -249,7 +249,8 @@ export const logout = () => async (dispatch) => {
         );
 
         dispatch(
-            authSlice.actions.logoutSuccess(res.data)
+            authSlice.actions.logoutSuccess(),
+            authSlice.actions.resetAuthSlice()
         );
 
     } catch (error) {
