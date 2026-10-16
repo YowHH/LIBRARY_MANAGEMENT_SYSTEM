@@ -1,10 +1,11 @@
-import express from "express"
-import { gettAllUsers, registerNewAdmin} from "../controllers/userController.js"
-import { isAuthenticated, isAuthorized} from "../middlewares/authMiddleware.js"
+import express from "express";
+import { getAllUsers, registerNewAdmin } from "../controllers/userController.js";
+import { isAuthenticated, isAuthorized } from "../middlewares/authMiddleware.js";
 
-const router = express.Router()
+const router = express.Router();
 
-router.get("/all", isAuthenticated, isAuthorized("Admin"), gettAllUsers)
-router.get("/add/new-admin", isAuthenticated, isAuthorized("Admin"), registerNewAdmin)
+router.get("/all", isAuthenticated, isAuthorized("Admin"), getAllUsers);
 
-export default router
+router.post("/new-admin", isAuthenticated, isAuthorized("Admin"), registerNewAdmin);
+
+export default router;

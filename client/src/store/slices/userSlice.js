@@ -41,19 +41,17 @@ export const fetchAllUsers = () => async(dispatch) => {
     })
 }
 
+/** @param {FormData} data */
 export const addNewAdmin = (data) => async(dispatch) => {
     dispatch(userSlice.actions.addNewAdminRequest())
-    await axios.post("http://localhost:4000/api/v1/user/add/new-admin", data, {
+    await axios.post("http://localhost:4000/api/v1/user/new-admin", data, {
         withCredentials: true,
-        headers: {
-            "Content-Type": "mltipart/form-data"
-        }
     }).then(res =>{
         dispatch(userSlice.actions.addNewAdminSuccess())
         toast.success(res.data.message)
     }).catch(err => {
         userSlice.actions.addNewAdminFailed()
-        toast.error(err.response.data.mssafe)
+        toast.error(err.response.data.message)
     })
 }
 

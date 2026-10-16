@@ -13,13 +13,14 @@ import { logout, resetAuthSlice } from "../store/slices/authSlice.js";
 import { toggleAddNewAdminPopup, toggleSettingPopup } from "../store/slices/popUpSlice.js";
 import { toast } from "react-toastify";
 import AddNewAdmin from "../popups/AddNewAdmin.jsx";
+import SettingPopUp from "../popups/SettingPopup.jsx";
 import { useNavigate } from "react-router-dom"; 
 
 // @ts-ignore
 const SideBar = ({ isSideBarOpen, setIsSideBarOpen, setSelectedComponent }) => {
   const navigateTo = useNavigate();
   const dispatch = useDispatch()
-  const { addNewAdminPopup } = useSelector(state => state.popup)
+  const { addNewAdminPopup, settingPopup } = useSelector(state => state.popup)
   const {loading, error, message, user, isAuthenticated} = useSelector(state => state.auth)
   const handleLogout = () => {
     dispatch(logout())
@@ -103,6 +104,7 @@ const SideBar = ({ isSideBarOpen, setIsSideBarOpen, setSelectedComponent }) => {
         />
       </aside>
       {addNewAdminPopup && <AddNewAdmin/>}
+      {settingPopup && <SettingPopUp/>}
     </>
   );
 };
